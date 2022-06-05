@@ -27,7 +27,7 @@ This is a tool demo for our prior work CodeMatcher
 
 ```
 Link: https://pan.baidu.com/s/13Ge4EhUjyN-XTtA2mUBlLg
-Access key：txs6
+Access key: txs6
 ```
 
 4. build indexing
