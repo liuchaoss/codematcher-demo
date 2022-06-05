@@ -23,10 +23,17 @@ This is a tool demo for our prior work CodeMatcher
 
 `./elasticsearch-8.2.0/bin/elasticsearch`
 
-3. build indexing
+3. download data to ./unzipdata/ 
+
+```
+Link: https://pan.baidu.com/s/13Ge4EhUjyN-XTtA2mUBlLg
+Access key：txs6
+```
+
+4. build indexing
 
 `python indexing.py`
 
-4. start flask
+5. start flask
 
 `python flask_show.py`
