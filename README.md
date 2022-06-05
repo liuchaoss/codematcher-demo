@@ -16,13 +16,17 @@ This is a tool demo for our prior work CodeMatcher
 
 ### ***working with CodeMatcher***
 1. install Elasticsearch 8.2
+
 `https://www.elastic.co/downloads/past-releases#elasticsearch`
 
 2. start Elasticsearch
+
 `./elasticsearch-8.2.0/bin/elasticsearch`
 
 3. build indexing
+
 `python indexing.py`
 
 4. start flask
+
 `python flask_show.py`
