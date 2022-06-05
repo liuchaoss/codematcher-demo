@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <title>Code Search</title>
+
+    <link rel="shortcut icon" href="static/img/favicon.ico"
+          type="image/x-icon"/>
+    <link rel="stylesheet"
+          href="static/lib/bootstrap-4.1.3-dist/css/bootstrap.css"
+          type="text/css"/>
+    <link href="static/css/index.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="static/css/a11y-light.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="static/css/load.css"/>
+    <link href="static/css/prism.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<header>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a class="navbar-brand align-items-center" href="#">
+                <img src="static/img/search-white.png" width="30" height="30"
+                     class="d-inline-block align-top"/>
+                CodeMatcher
+            </a>
+        </div>
+    </div>
+</header>
+
+<main role="main">
+    <section class="jumbotron text-center not-search">
+        <div class="container">
+            <h1 class="jumbotron-heading">Code Search</h1>
+            <div class="input-group mt-5 mb-3 position-relative">
+                <input type="text" id="keyword"
+                       class="form-control keyword-input"
+                       placeholder="Please input a query in English (e.g., how to convert int to string)" autocomplete="off"
+                       aria-describedby="button-addon2"/>
+                <div class="input-group-append">
+                    <button id="searchPaper"
+                            class="btn btn-outline-secondary px-4" type="button"
+                            style="z-index: 0;" onClick="fun()">Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="win8s"
+             style="top: 0px; left: 0px; position: absolute; width: 100%; height: 100%; backdrop-filter: blur(2px); z-index:4;">
+        <div class="windows8" id="windows8"
+             style="position: absolute; bottom: 50%; left: 45%; width: 10%;">
+            <div class="wBall" id="wBall_1">
+                <div class="wInnerBall"></div>
+            </div>
+            <div class="wBall" id="wBall_2">
+                <div class="wInnerBall"></div>
+            </div>
+            <div class="wBall" id="wBall_3">
+                <div class="wInnerBall"></div>
+            </div>
+            <div class="wBall" id="wBall_4">
+                <div class="wInnerBall"></div>
+            </div>
+            <div class="wBall" id="wBall_5">
+                <div class="wInnerBall"></div>
+            </div>
+        </div>
+    </section>
+
+
+    <!--        <div id="resultSection" class="py-5 bg-light" style="position: absolute; width: 70%; left: 15%;">
+        <div class="container">
+        </div>
+            <div class="final" id="final">
+
+            </div>
+    </div>-->
+    <div id="resultSection" class="py-5 bg-light"
+         style="position: absolute; width: 70%; left: 15%;">
+        <div class="container">
+            <div class="final" id="final">
+
+            </div>
+        </div>
+    </div>
+
+</main>
+<!--    <script src="static/js/highlight.pack.js"></script>-->
+<script src="static/lib/jquery-3.3.1.min.js"></script>
+<script src="static/js/prism.js"></script>
+
+<script>
+    <!--关闭自动高亮显示，手动控制代码高亮时机-->
+    window.Prism = window.Prism || {};
+    Prism.manual = true;
+</script>
+<script>
+    function fun() {
+        document.getElementById("keyword").blur()
+        document.getElementById("searchPaper").blur()
+        $("#final").empty();
+        key = $("#keyword").val()
+        if (key == "") {
+            $("#win8s").hide;
+            alert("Please input a query in English first!")
+            return;
+        }
+        $("#win8s").show();
+        /*getJSON() 方法使用 AJAX 的 HTTP GET 请求获取 JSON 数据，参数为一个json格式内容。*/
+        $.getJSON({
+            /*url规定将请求发送到哪个url*/
+            url: "http://localhost:5000/search/" + key,
+            /*success规定当请求成功时运行的函数。
+                data - 包含从服务器返回的数据
+                status - 包含请求的状态（"success"、"notmodified"、"error"、"timeout"、"parsererror"）
+                xhr - 包含 XMLHttpRequest 对象
+                这里只使用了data参数*/
+            success: function (result) {
+                // 获取返回的数据中我们需要的部分,res是一个数组，element是一个搜索到的的java源代码
+                // 将获取到的所有java源代码赋值给一个js对象res（不是JQuery对象！）
+                var res = result['result'];
+                // 对每一个java源代码，执行函数中的操作，foo是res中的一个java源代码
+                res.forEach(function (foo) {
+                    foo = $.trim(foo);
+                    var i = 0;
+                    var t = 0;
+                    var ans = "";
+                    var line = "";
+                    for (i = 0; i < foo.length; ++i) {
+                        ans += foo[i];
+                        if (foo[i] == "{") {
+                            line += "    ".repeat(t) + ans + "\n";
+                            ans = "";
+                            ++t;
+                        }
+                        if (foo[i] == ";") {
+                            line += "    ".repeat(t) + ans + "\n";
+                            ans = "";
+                        }
+                        if (foo[i] == "@"){
+                            ans = ans.substr(0,ans.length-1) + ";"
+                        }
+                        if (foo[i] == "}") {
+                            --t;
+                            if (t < 0)
+                                t = 0;
+                            line += "    ".repeat(t) + ans + "\n";
+                            ans = "";
+                        }
+
+
+                    }
+                    // $("#final").append("<pre style='background-color: antiquewhite;'> result " + j + "\n" + "<code class= 'java' >" + line +"</></>");
+                    $("#final").append("<pre class='line-numbers'><code class='language-java'>"+line+"</code></pre>");
+
+                });
+                //此时已经加载完毕，手动高亮所有代码块
+                Prism.highlightAll();
+                $("section.jumbotron").animate({
+                    margin: "0"
+                });
+                $("#resultSection").show();
+                $("#win8s").hide();
+            }
+        });
+
+    }
+</script>
+<script>
+    var wh = document.getElementById("windows8");
+    wh.style.height = getComputedStyle(wh).width;
+    $(document).keyup(function (event) {
+        if (event.keyCode == 13) {
+            fun();
+        }
+    });
+
+    $(document).ready(function () {
+        // 页面刚开始隐藏搜索结果的部分
+        $("#resultSection").hide();
+        $("#win8s").hide();
+    });
+</script>
+</body>
+
+</html>
