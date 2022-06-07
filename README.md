@@ -23,6 +23,10 @@ This is a tool demo for our prior work CodeMatcher
 
 `./elasticsearch-8.2.0/bin/elasticsearch`
 
+check the status of Elasticsearch
+
+`http://x.x.x.x:9200`
+
 3. download data to ./unzipdata/ 
 
 ```
@@ -37,3 +41,7 @@ Access key: txs6
 5. start flask
 
 `python flask_show.py`
+
+check the status of codematcher
+
+`http://x.x.x.x:5000`
