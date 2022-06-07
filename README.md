@@ -30,7 +30,7 @@ Link: https://pan.baidu.com/s/13Ge4EhUjyN-XTtA2mUBlLg
 Access key: txs6
 ```
 
-4. build indexing
+4. fill data into Elasticsearch and build indexing
 
 `python indexing.py`
 
