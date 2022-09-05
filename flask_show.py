@@ -3,12 +3,10 @@ import util
 import parsing
 from indexing import SearchEngine
 import reranking
-from caching import Cache
 
 se = SearchEngine()
 app = Flask(__name__)
 jdk = util.load_pkl('data/jdk_vocab.pkl')
-ca = Cache()
 
 
 @app.route('/')
