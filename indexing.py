@@ -235,4 +235,4 @@ class SearchEngine:
 if __name__ == '__main__':
     se = SearchEngine()
     se.create_index()
-    se.fill_data('unzipdata')
+    se.fill_data('unzipdata/')

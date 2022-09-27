@@ -72,13 +72,6 @@
     </section>
 
 
-    <!--        <div id="resultSection" class="py-5 bg-light" style="position: absolute; width: 70%; left: 15%;">
-        <div class="container">
-        </div>
-            <div class="final" id="final">
-
-            </div>
-    </div>-->
     <div id="resultSection" class="py-5 bg-light"
          style="position: absolute; width: 70%; left: 15%;">
         <div class="container">
@@ -89,7 +82,6 @@
     </div>
 
 </main>
-<!--    <script src="static/js/highlight.pack.js"></script>-->
 <script src="static/lib/jquery-3.3.1.min.js"></script>
 <script src="static/js/prism.js"></script>
 
@@ -126,6 +118,16 @@
                 // 对每一个java源代码，执行函数中的操作，foo是res中的一个java源代码
                 res.forEach(function (foo) {
                     foo = $.trim(foo);
+                    foo= foo.replace(/[<">']/g, (a) => {
+                        return {
+                            "&": "&amp",
+                            "<": "&lt",
+                            ">": "&gt",
+                            '"': '&quot',
+                            "'": '&#39',
+                            "/": '&#x2F'
+                        }[a]
+                    });
                     var i = 0;
                     var t = 0;
                     var ans = "";
@@ -151,12 +153,8 @@
                             line += "    ".repeat(t) + ans + "\n";
                             ans = "";
                         }
-
-
                     }
-                    // $("#final").append("<pre style='background-color: antiquewhite;'> result " + j + "\n" + "<code class= 'java' >" + line +"</></>");
                     $("#final").append("<pre class='line-numbers'><code class='language-java'>"+line+"</code></pre>");
-
                 });
                 //此时已经加载完毕，手动高亮所有代码块
                 Prism.highlightAll();
