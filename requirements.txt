@@ -22,3 +22,4 @@ typing-extensions==4.2.0
 urllib3==1.26.9
 Werkzeug==2.1.2
 zipp==3.8.0
+Flask_Cors==3.0.10
